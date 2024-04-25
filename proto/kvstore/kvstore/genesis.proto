@@ -1,0 +1,17 @@
+syntax = "proto3";
+package kvstore.kvstore;
+
+import "amino/amino.proto";
+import "gogoproto/gogo.proto";
+import "kvstore/kvstore/params.proto";
+
+option go_package = "kvstore/x/kvstore/types";
+
+// GenesisState defines the kvstore module's genesis state.
+message GenesisState {
+  // params defines all the parameters of the module.
+  Params params = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+}

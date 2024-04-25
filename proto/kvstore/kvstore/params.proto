@@ -1,0 +1,15 @@
+syntax = "proto3";
+package kvstore.kvstore;
+
+import "amino/amino.proto";
+import "gogoproto/gogo.proto";
+
+option go_package = "kvstore/x/kvstore/types";
+
+// Params defines the parameters for the module.
+message Params {
+  option (amino.name) = "kvstore/x/kvstore/Params";
+  option (gogoproto.equal) = true;
+
+  
+}
