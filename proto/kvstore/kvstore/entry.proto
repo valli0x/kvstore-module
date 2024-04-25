@@ -1,0 +1,10 @@
+syntax = "proto3";
+package kvstore.kvstore;
+
+option go_package = "kvstore/x/kvstore/types";
+
+message Entry {
+  
+  string key = 1; 
+  string value = 2; 
+}

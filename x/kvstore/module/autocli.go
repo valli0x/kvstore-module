@@ -17,6 +17,13 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Use:       "params",
 					Short:     "Shows the parameters of the module",
 				},
+				{
+					RpcMethod:      "GetEntry",
+					Use:            "get-entry [key]",
+					Short:          "Query get-entry",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "key"}},
+				},
+
 				// this line is used by ignite scaffolding # autocli/query
 			},
 		},
@@ -27,6 +34,12 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				{
 					RpcMethod: "UpdateParams",
 					Skip:      true, // skipped because authority gated
+				},
+				{
+					RpcMethod:      "SetEntry",
+					Use:            "set-entry [key] [value]",
+					Short:          "Send a set-entry tx",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "key"}, {ProtoField: "value"}},
 				},
 				// this line is used by ignite scaffolding # autocli/tx
 			},

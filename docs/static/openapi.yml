@@ -16219,6 +16219,48 @@ paths:
               parameters.
       tags:
         - Msg
+  /kvstore/kvstore/get_entry/{key}:
+    get:
+      summary: Queries a list of GetEntry items.
+      operationId: KvstoreKvstoreQuery_GetEntry
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              entry:
+                type: object
+                properties:
+                  key:
+                    type: string
+                  value:
+                    type: string
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: key
+          in: path
+          required: true
+          type: string
+      tags:
+        - Query
   /kvstore/kvstore/params:
     get:
       summary: Parameters queries the parameters of the module.
@@ -16255,6 +16297,47 @@ paths:
                   additionalProperties: {}
       tags:
         - Query
+  /kvstore.kvstore.Msg/SetEntry:
+    post:
+      operationId: KvstoreKvstoreMsg_SetEntry
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              creator:
+                type: string
+              key:
+                type: string
+              value:
+                type: string
+      tags:
+        - Msg
   /kvstore.kvstore.Msg/UpdateParams:
     post:
       summary: |-
@@ -16303,10 +16386,7 @@ paths:
                   authority is the address that controls the module (defaults to
                   x/gov unless overwritten).
               params:
-                description: |-
-                  params defines the module parameters to update.
-
-                  NOTE: All parameters must be supplied.
+                description: 'NOTE: All parameters must be supplied.'
                 type: object
             description: MsgUpdateParams is the Msg/UpdateParams request type.
       tags:
@@ -22963,9 +23043,26 @@ definitions:
     description: |-
       Version defines the versioning scheme used to negotiate the IBC verison in
       the connection handshake.
+  kvstore.kvstore.Entry:
+    type: object
+    properties:
+      key:
+        type: string
+      value:
+        type: string
   kvstore.kvstore.Params:
     type: object
     description: Params defines the parameters for the module.
+  kvstore.kvstore.QueryGetEntryResponse:
+    type: object
+    properties:
+      entry:
+        type: object
+        properties:
+          key:
+            type: string
+          value:
+            type: string
   kvstore.kvstore.QueryParamsResponse:
     type: object
     properties:
@@ -22973,6 +23070,17 @@ definitions:
         description: params holds all the parameters of this module.
         type: object
     description: QueryParamsResponse is response type for the Query/Params RPC method.
+  kvstore.kvstore.MsgSetEntry:
+    type: object
+    properties:
+      creator:
+        type: string
+      key:
+        type: string
+      value:
+        type: string
+  kvstore.kvstore.MsgSetEntryResponse:
+    type: object
   kvstore.kvstore.MsgUpdateParams:
     type: object
     properties:
@@ -22982,10 +23090,7 @@ definitions:
           authority is the address that controls the module (defaults to x/gov
           unless overwritten).
       params:
-        description: |-
-          params defines the module parameters to update.
-
-          NOTE: All parameters must be supplied.
+        description: 'NOTE: All parameters must be supplied.'
         type: object
     description: MsgUpdateParams is the Msg/UpdateParams request type.
   kvstore.kvstore.MsgUpdateParamsResponse:
