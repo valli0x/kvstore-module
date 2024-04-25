@@ -6,10 +6,14 @@
 ```
 ignite chain serve
 
-set msg:
+msg:
 kvstored tx kvstore set-entry key helloworld --from alice --chain-id kvstore
 
-get msg:
+query:
 kvstored q kvstore get-entry key
 ```
+ru desc: 
+* proto/kvstore/kvstore/entry.proto - cущность с которой работает модуль kvstore(Entry)
+* proto/kvstore/kvstore/query.proto - получение даннных из блокчейна(GetEntry)
+* proto/kvstore/kvstore/tx.proto - изменение состояния блокчейна(SetEntry)
 
