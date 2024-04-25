@@ -10,7 +10,9 @@ import (
 )
 
 func (k Keeper) Put(ctx context.Context, store prefix.Store, entry types.Entry) error {
-	if store.Has([]byte(entry.Key)) {
+	keyb := []byte(entry.Key)
+
+	if store.Has(keyb) {
 		return errors.Wrap(types.ErrEntryExist, entry.Key)
 	}
 
@@ -18,23 +20,24 @@ func (k Keeper) Put(ctx context.Context, store prefix.Store, entry types.Entry) 
 		Value: entry.Value,
 	})
 	if err != nil {
-		return errors.Wrap(err, "Marshal entry failed")
+		return errors.Wrap(types.ErrEntryNotExist, entry.Key)
 	}
 
-	store.Set([]byte(entry.Key), bz)
+	store.Set(keyb, bz)
 	return nil
 }
 
 func (k Keeper) Get(ctx context.Context, store prefix.Store, key string) (types.Entry, error) {
 	var result types.Entry
+	keyb := []byte(key)
 
 	// get can return nil
-	if !store.Has([]byte(key)) {
+	if !store.Has(keyb) {
 		return result, errors.Wrap(types.ErrEntryExist, key)
 	}
 
-	bz := store.Get([]byte(key))
-	
+	bz := store.Get(keyb)
+
 	if err := k.cdc.Unmarshal(bz, &result); err != nil {
 		return result, err
 	}
