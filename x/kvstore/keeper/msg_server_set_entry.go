@@ -16,7 +16,12 @@ func (k msgServer) SetEntry(goCtx context.Context, msg *types.MsgSetEntry) (*typ
 	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
 	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.StoreKey))
 
-	store.Set([]byte(msg.Key), []byte(msg.Value))
+	if err := k.Put(ctx, store, types.Entry{
+		Key: msg.Key,
+		Value: msg.Value,
+	}); err != nil {
+		return &types.MsgSetEntryResponse{}, err
+	}
 
 	return &types.MsgSetEntryResponse{}, nil
 }

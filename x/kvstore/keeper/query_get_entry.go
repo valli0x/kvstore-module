@@ -22,15 +22,12 @@ func (k Keeper) GetEntry(goCtx context.Context, req *types.QueryGetEntryRequest)
 	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
 	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.StoreKey))
 
-	value := store.Get([]byte(req.Key))
-	if value == nil {
-		return nil, status.Error(codes.NotFound, "not found")
+	entry, err := k.Get(ctx, store, req.Key)
+	if err != nil {
+		return &types.QueryGetEntryResponse{}, nil
 	}
 
 	return &types.QueryGetEntryResponse{
-		Entry: &types.Entry{
-			Key:   req.Key,
-			Value: string(value),
-		},
+		Entry: &entry,
 	}, nil
 }
