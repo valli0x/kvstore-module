@@ -17,3 +17,4 @@ ru desc:
 * proto/kvstore/kvstore/query.proto - получение даннных из блокчейна(GetEntry)
 * proto/kvstore/kvstore/tx.proto - изменение состояния блокчейна(SetEntry)
 
+для работы с kvstore можно взять пример из [osmosis](https://mapofzones.com/home/osmosis-1/overview?columnKey=ibcVolume&period=24h) - https://github.com/osmosis-labs/osmosis/blob/main/osmoutils/store_helper.go#L154
