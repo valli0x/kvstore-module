@@ -8,6 +8,7 @@ import (
 	"cosmossdk.io/errors"
 	"cosmossdk.io/store/prefix"
 )
+// osmosis example https://github.com/osmosis-labs/osmosis/blob/main/osmoutils/store_helper.go#L154
 
 func (k Keeper) Put(ctx context.Context, store prefix.Store, entry types.Entry) error {
 	keyb := types.KeyPrefix(entry.Key)
