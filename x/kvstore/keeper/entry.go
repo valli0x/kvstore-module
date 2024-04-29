@@ -10,7 +10,7 @@ import (
 )
 
 func (k Keeper) Put(ctx context.Context, store prefix.Store, entry types.Entry) error {
-	keyb := []byte(entry.Key)
+	keyb := types.KeyPrefix(entry.Key)
 
 	if store.Has(keyb) {
 		return errors.Wrap(types.ErrEntryExist, entry.Key)
@@ -29,7 +29,7 @@ func (k Keeper) Put(ctx context.Context, store prefix.Store, entry types.Entry) 
 
 func (k Keeper) Get(ctx context.Context, store prefix.Store, key string) (types.Entry, error) {
 	var result types.Entry
-	keyb := []byte(key)
+	keyb := types.KeyPrefix(key)
 
 	// get can return nil
 	if !store.Has(keyb) {
