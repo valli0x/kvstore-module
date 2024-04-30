@@ -21,7 +21,7 @@ func (k Keeper) Put(ctx context.Context, store prefix.Store, entry types.Entry) 
 		Value: entry.Value,
 	})
 	if err != nil {
-		return errors.Wrap(types.ErrEntryNotExist, entry.Key)
+		return errors.Wrap(err, entry.Key)
 	}
 
 	store.Set(keyb, bz)
@@ -34,7 +34,7 @@ func (k Keeper) Get(ctx context.Context, store prefix.Store, key string) (types.
 
 	// get can return nil
 	if !store.Has(keyb) {
-		return result, errors.Wrap(types.ErrEntryExist, key)
+		return result, errors.Wrap(types.ErrEntryNotExist, key)
 	}
 
 	bz := store.Get(keyb)
