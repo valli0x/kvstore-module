@@ -46,11 +46,11 @@ func noStopFn([]byte) bool {
 }
 
 /*
-	Delete entries with prefix 
+	Delete entries with prefix
 */
 
 // DeleteAllKeysFromPrefix deletes all store records that contains the given prefixKey.
-func DeleteAllKeysFromPrefix(store store.KVStore, prefixKey []byte) {
+func DeleteAllKeysFromPrefix(store store.KVStore, prefixKey []byte) error {
 	prefixStore := prefix.NewStore(store, prefixKey)
 	iter := prefixStore.Iterator(nil, nil)
 	defer iter.Close()
@@ -58,4 +58,5 @@ func DeleteAllKeysFromPrefix(store store.KVStore, prefixKey []byte) {
 	for ; iter.Valid(); iter.Next() {
 		prefixStore.Delete(iter.Key())
 	}
+	return nil
 }

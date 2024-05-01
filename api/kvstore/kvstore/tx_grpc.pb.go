@@ -8,6 +8,7 @@ package kvstore
 
 import (
 	context "context"
+
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -21,6 +22,7 @@ const _ = grpc.SupportPackageIsVersion7
 const (
 	Msg_UpdateParams_FullMethodName = "/kvstore.kvstore.Msg/UpdateParams"
 	Msg_SetEntry_FullMethodName     = "/kvstore.kvstore.Msg/SetEntry"
+	Msg_DeleteEntry_FullMethodName  = "/kvstore.kvstore.Msg/DeleteEntry"
 )
 
 // MsgClient is the client API for Msg service.
@@ -31,6 +33,7 @@ type MsgClient interface {
 	// parameters. The authority defaults to the x/gov module account.
 	UpdateParams(ctx context.Context, in *MsgUpdateParams, opts ...grpc.CallOption) (*MsgUpdateParamsResponse, error)
 	SetEntry(ctx context.Context, in *MsgSetEntry, opts ...grpc.CallOption) (*MsgSetEntryResponse, error)
+	DeleteEntry(ctx context.Context, in *MsgDeleteEntry, opts ...grpc.CallOption) (*MsgDeleteEntryResponse, error)
 }
 
 type msgClient struct {
@@ -59,6 +62,15 @@ func (c *msgClient) SetEntry(ctx context.Context, in *MsgSetEntry, opts ...grpc.
 	return out, nil
 }
 
+func (c *msgClient) DeleteEntry(ctx context.Context, in *MsgDeleteEntry, opts ...grpc.CallOption) (*MsgDeleteEntryResponse, error) {
+	out := new(MsgDeleteEntryResponse)
+	err := c.cc.Invoke(ctx, Msg_DeleteEntry_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MsgServer is the server API for Msg service.
 // All implementations must embed UnimplementedMsgServer
 // for forward compatibility
@@ -67,6 +79,7 @@ type MsgServer interface {
 	// parameters. The authority defaults to the x/gov module account.
 	UpdateParams(context.Context, *MsgUpdateParams) (*MsgUpdateParamsResponse, error)
 	SetEntry(context.Context, *MsgSetEntry) (*MsgSetEntryResponse, error)
+	DeleteEntry(context.Context, *MsgDeleteEntry) (*MsgDeleteEntryResponse, error)
 	mustEmbedUnimplementedMsgServer()
 }
 
@@ -79,6 +92,9 @@ func (UnimplementedMsgServer) UpdateParams(context.Context, *MsgUpdateParams) (*
 }
 func (UnimplementedMsgServer) SetEntry(context.Context, *MsgSetEntry) (*MsgSetEntryResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetEntry not implemented")
+}
+func (UnimplementedMsgServer) DeleteEntry(context.Context, *MsgDeleteEntry) (*MsgDeleteEntryResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteEntry not implemented")
 }
 func (UnimplementedMsgServer) mustEmbedUnimplementedMsgServer() {}
 
@@ -129,6 +145,24 @@ func _Msg_SetEntry_Handler(srv interface{}, ctx context.Context, dec func(interf
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_DeleteEntry_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgDeleteEntry)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).DeleteEntry(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_DeleteEntry_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).DeleteEntry(ctx, req.(*MsgDeleteEntry))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Msg_ServiceDesc is the grpc.ServiceDesc for Msg service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -143,6 +177,10 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SetEntry",
 			Handler:    _Msg_SetEntry_Handler,
+		},
+		{
+			MethodName: "DeleteEntry",
+			Handler:    _Msg_DeleteEntry_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

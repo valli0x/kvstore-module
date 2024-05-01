@@ -48,14 +48,7 @@ func (k Keeper) Get(ctx context.Context, store prefix.Store, key string) (types.
 }
 
 func (k Keeper) Delete(ctx context.Context, store prefix.Store, key string) error {
-	keyb := types.KeyPrefix(key)
-
-	if !store.Has(keyb) {
-		return errors.Wrap(types.ErrEntryNotExist, key)
-	}
-
-	store.Delete(keyb)
-	return nil
+	return DeleteAllKeysFromPrefix(store, types.KeyPrefix(key))
 }
 
 func (k Keeper) List(ctx context.Context, store prefix.Store, prefixKey string) ([]*types.Entry, error) {

@@ -48,6 +48,12 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Short:          "Send a set-entry tx",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "key"}, {ProtoField: "value"}},
 				},
+				{
+					RpcMethod:      "DeleteEntry",
+					Use:            "delete-entry [key]",
+					Short:          "Send a delete-entry tx",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "key"}},
+				},
 				// this line is used by ignite scaffolding # autocli/tx
 			},
 		},
