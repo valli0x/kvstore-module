@@ -24,6 +24,13 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "key"}},
 				},
 
+				{
+					RpcMethod:      "ListEntry",
+					Use:            "list-entry [key]",
+					Short:          "Query list-entry",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "key"}},
+				},
+
 				// this line is used by ignite scaffolding # autocli/query
 			},
 		},

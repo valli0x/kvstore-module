@@ -25,6 +25,12 @@ service Query {
     option (google.api.http).get = "/kvstore/kvstore/get_entry/{key}";
   
   }
+  
+  // Queries a list of ListEntry items.
+  rpc ListEntry (QueryListEntryRequest) returns (QueryListEntryResponse) {
+    option (google.api.http).get = "/kvstore/kvstore/list_entry/{key}";
+  
+  }
 }
 // QueryParamsRequest is request type for the Query/Params RPC method.
 message QueryParamsRequest {}
@@ -42,5 +48,15 @@ message QueryGetEntryRequest {
 
 message QueryGetEntryResponse {
   Entry entry = 1;
+}
+
+message QueryListEntryRequest {
+  string                                key        = 1;
+  cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+message QueryListEntryResponse {
+  repeated Entry                         entry      = 1;
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 

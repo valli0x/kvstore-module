@@ -17,7 +17,7 @@ func (k msgServer) SetEntry(goCtx context.Context, msg *types.MsgSetEntry) (*typ
 	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.StoreKey))
 
 	if err := k.Put(ctx, store, types.Entry{
-		Key: msg.Key,
+		Key:   msg.Key,
 		Value: msg.Value,
 	}); err != nil {
 		return &types.MsgSetEntryResponse{}, err

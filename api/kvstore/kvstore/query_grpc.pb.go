@@ -19,8 +19,9 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Query_Params_FullMethodName   = "/kvstore.kvstore.Query/Params"
-	Query_GetEntry_FullMethodName = "/kvstore.kvstore.Query/GetEntry"
+	Query_Params_FullMethodName    = "/kvstore.kvstore.Query/Params"
+	Query_GetEntry_FullMethodName  = "/kvstore.kvstore.Query/GetEntry"
+	Query_ListEntry_FullMethodName = "/kvstore.kvstore.Query/ListEntry"
 )
 
 // QueryClient is the client API for Query service.
@@ -31,6 +32,8 @@ type QueryClient interface {
 	Params(ctx context.Context, in *QueryParamsRequest, opts ...grpc.CallOption) (*QueryParamsResponse, error)
 	// Queries a list of GetEntry items.
 	GetEntry(ctx context.Context, in *QueryGetEntryRequest, opts ...grpc.CallOption) (*QueryGetEntryResponse, error)
+	// Queries a list of ListEntry items.
+	ListEntry(ctx context.Context, in *QueryListEntryRequest, opts ...grpc.CallOption) (*QueryListEntryResponse, error)
 }
 
 type queryClient struct {
@@ -59,6 +62,15 @@ func (c *queryClient) GetEntry(ctx context.Context, in *QueryGetEntryRequest, op
 	return out, nil
 }
 
+func (c *queryClient) ListEntry(ctx context.Context, in *QueryListEntryRequest, opts ...grpc.CallOption) (*QueryListEntryResponse, error) {
+	out := new(QueryListEntryResponse)
+	err := c.cc.Invoke(ctx, Query_ListEntry_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QueryServer is the server API for Query service.
 // All implementations must embed UnimplementedQueryServer
 // for forward compatibility
@@ -67,6 +79,8 @@ type QueryServer interface {
 	Params(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error)
 	// Queries a list of GetEntry items.
 	GetEntry(context.Context, *QueryGetEntryRequest) (*QueryGetEntryResponse, error)
+	// Queries a list of ListEntry items.
+	ListEntry(context.Context, *QueryListEntryRequest) (*QueryListEntryResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }
 
@@ -79,6 +93,9 @@ func (UnimplementedQueryServer) Params(context.Context, *QueryParamsRequest) (*Q
 }
 func (UnimplementedQueryServer) GetEntry(context.Context, *QueryGetEntryRequest) (*QueryGetEntryResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetEntry not implemented")
+}
+func (UnimplementedQueryServer) ListEntry(context.Context, *QueryListEntryRequest) (*QueryListEntryResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListEntry not implemented")
 }
 func (UnimplementedQueryServer) mustEmbedUnimplementedQueryServer() {}
 
@@ -129,6 +146,24 @@ func _Query_GetEntry_Handler(srv interface{}, ctx context.Context, dec func(inte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_ListEntry_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryListEntryRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).ListEntry(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_ListEntry_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).ListEntry(ctx, req.(*QueryListEntryRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Query_ServiceDesc is the grpc.ServiceDesc for Query service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -143,6 +178,10 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetEntry",
 			Handler:    _Query_GetEntry_Handler,
+		},
+		{
+			MethodName: "ListEntry",
+			Handler:    _Query_ListEntry_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
