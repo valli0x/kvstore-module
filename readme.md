@@ -18,7 +18,7 @@ kvstored q kvstore list-entry k
 
 ru desc: 
 * proto/kvstore/kvstore/entry.proto - cущность с которой работает модуль kvstore(Entry)
-* proto/kvstore/kvstore/query.proto - получение даннных из блокчейна(GetEntry)
+* proto/kvstore/kvstore/query.proto - получение даннных из блокчейна(GetEntry, ListEntry)
 * proto/kvstore/kvstore/tx.proto - изменение состояния блокчейна(SetEntry)
 
 для работы с kvstore можно взять пример из [osmosis](https://mapofzones.com/home/osmosis-1/overview?columnKey=ibcVolume&period=24h)
