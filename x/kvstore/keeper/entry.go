@@ -8,6 +8,7 @@ import (
 	"cosmossdk.io/errors"
 	"cosmossdk.io/store/prefix"
 )
+
 // osmosis example https://github.com/osmosis-labs/osmosis/blob/main/osmoutils/store_helper.go#L154
 
 func (k Keeper) Put(ctx context.Context, store prefix.Store, entry types.Entry) error {
@@ -44,4 +45,28 @@ func (k Keeper) Get(ctx context.Context, store prefix.Store, key string) (types.
 	}
 
 	return result, nil
+}
+
+func (k Keeper) Delete(ctx context.Context, store prefix.Store, key string) error {
+	keyb := types.KeyPrefix(key)
+
+	if !store.Has(keyb) {
+		return errors.Wrap(types.ErrEntryNotExist, key)
+	}
+
+	store.Delete(keyb)
+	return nil
+}
+
+func (k Keeper) List(ctx context.Context, store prefix.Store, prefixKey string) ([]string, error) {
+	// parsing entry func
+	parseValue := func(value []byte) (string, error) {
+		entry := types.Entry{}
+		if err := k.cdc.Unmarshal(value, &entry); err != nil {
+			return "", err
+		}
+		return entry.Key, nil
+	}
+
+	return GatherValuesFromStorePrefix(store, types.KeyPrefix(prefixKey), parseValue)
 }
