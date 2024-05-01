@@ -58,14 +58,14 @@ func (k Keeper) Delete(ctx context.Context, store prefix.Store, key string) erro
 	return nil
 }
 
-func (k Keeper) List(ctx context.Context, store prefix.Store, prefixKey string) ([]string, error) {
+func (k Keeper) List(ctx context.Context, store prefix.Store, prefixKey string) ([]types.Entry, error) {
 	// parsing entry func
-	parseValue := func(value []byte) (string, error) {
+	parseValue := func(value []byte) (types.Entry, error) {
 		entry := types.Entry{}
 		if err := k.cdc.Unmarshal(value, &entry); err != nil {
-			return "", err
+			return types.Entry{}, err
 		}
-		return entry.Key, nil
+		return entry, nil
 	}
 
 	return GatherValuesFromStorePrefix(store, types.KeyPrefix(prefixKey), parseValue)
