@@ -22,3 +22,8 @@ ru desc:
 * proto/kvstore/kvstore/tx.proto - изменение состояния блокчейна(SetEntry)
 
 для работы с kvstore можно взять пример из [osmosis](https://mapofzones.com/home/osmosis-1/overview?columnKey=ibcVolume&period=24h)
+
+remarks: 
+* модуль тестовый, но нужно было изначально его правильно инициализировать - github.com/valli0x/kvstore-module(текущие правки были бы значительными, перекомпиляция и замена импортов)
+* нужно добавить документацию к методам модуля
+* list-entry запрос выводит по префиксу все entry - это было сделано для примера, сам метод должен выводить список ключей по префиксу
