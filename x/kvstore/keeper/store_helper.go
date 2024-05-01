@@ -2,9 +2,14 @@ package keeper
 
 import (
 	"cosmossdk.io/store"
+	"cosmossdk.io/store/prefix"
 	stortypes "cosmossdk.io/store/types"
 	db "github.com/cosmos/cosmos-db"
 )
+
+/*
+	Iterator
+*/
 
 func GatherValuesFromStorePrefix[T any](storeObj store.KVStore, prefix []byte, parseValue func([]byte) (T, error)) ([]T, error) {
 	// Replace a callback with the one that takes both key and value
@@ -38,4 +43,19 @@ func gatherValuesFromIteratorWithKeyParser[T any](iterator db.Iterator, parse fu
 
 func noStopFn([]byte) bool {
 	return false
+}
+
+/*
+	Delete entries with prefix 
+*/
+
+// DeleteAllKeysFromPrefix deletes all store records that contains the given prefixKey.
+func DeleteAllKeysFromPrefix(store store.KVStore, prefixKey []byte) {
+	prefixStore := prefix.NewStore(store, prefixKey)
+	iter := prefixStore.Iterator(nil, nil)
+	defer iter.Close()
+
+	for ; iter.Valid(); iter.Next() {
+		prefixStore.Delete(iter.Key())
+	}
 }
